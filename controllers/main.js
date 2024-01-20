@@ -16,26 +16,12 @@ const login = async (req, res) => {
 };
 
 const dashbord = async (req, res) => {
-  const authHeader = req.headers.authorization;
-  console.log(authHeader.startsWith("Bearer "));
+  const luckyNumber = Math.floor(Math.random() * 100);
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new CustomError("No token provided", 401);
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decode = jwt.verify(token, "sameer");
-    const luckyNumber = Math.floor(Math.random() * 100);
-
-    res.status(200).json({
-      msg: `hello from ${decode.username}`,
-      secret: `Here is your lucky number is ${luckyNumber}`,
-    });
-  } catch {
-    throw new CustomError("No token provided", 401);
-  }
+  res.status(200).json({
+    msg: `hello from ${req.user.username}`,
+    secret: `Here is your lucky number is ${luckyNumber}`,
+  });
 };
 
 module.exports = { login, dashbord };
